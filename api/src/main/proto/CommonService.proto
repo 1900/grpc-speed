@@ -1,0 +1,30 @@
+syntax = "proto3";
+option java_package = "com.funtime.grpc.common.pager.grpc";
+
+/*
+   存放公共的 模型
+*/
+
+//分页
+message Pager {
+    //当前第几页   返回当前页的数目。总是非负的
+    int32 page = 1;
+    //返回当前页面的大小。
+    int32 size = 2;
+    //返回分页总数。
+    int32 totalPages = 3;
+    //返回当前页上的元素数。
+    int32 numberElements = 4;
+    //返回元素总数。
+    int64 totalElements = 5;
+    //返回如果有上一页。
+    bool hasPrevious = 6;
+    //返回当前页是否为第一页。
+    bool isFirst = 7;
+    //返回如果有下一页。
+    bool hasNext = 8;
+    //返回当前页是否为最后一页。
+    bool isLast = 9;
+    //返回数据是否有内容。
+    bool hasContent = 10;
+}

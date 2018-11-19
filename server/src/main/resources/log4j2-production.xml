@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="warn" name="grpc-speed" packages="com.funtime.log4j2">
+    <Appenders>
+        <RollingRandomAccessFile name="rraf"
+                                 filePattern="logs/grpc-server-%d{yyyy-MM-dd}.log"
+                                 fileName="logs/grpc-server.log">
+            <PatternLayout>
+                <Pattern>%d %p [%t] - %m - (%F:%L)%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy/>
+            </Policies>
+        </RollingRandomAccessFile>
+        <RollingRandomAccessFile name="rraf-error"
+                                 filePattern="logs/error-%d{yyyy-MM-dd}.log"
+                                 fileName="logs/error.log">
+            <PatternLayout>
+                <Pattern>%d %p [%t] - %m - (%F:%L)%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy/>
+            </Policies>
+        </RollingRandomAccessFile>
+        <Kafka name="Kafka" topic="grpc-speed">
+            <PatternLayout pattern="%date %message"/>
+            <Property name="bootstrap.servers">kafka:9092</Property>
+        </Kafka>
+        <Async name="async-kafka">
+            <AppenderRef ref="Kafka"/>
+        </Async>
+    </Appenders>
+    <Loggers>
+        <Root level="info">
+            <!--正常业务日志-->
+            <AppenderRef ref="rraf" level="info"/>
+            <!--异常日志-->
+            <AppenderRef ref="rraf-error" level="warn"/>
+            <!--kafka异步日志-->
+            <AppenderRef ref="async-kafka"/>
+        </Root>
+        <!--屏蔽RocketMQ心跳日志-->
+        <Logger name="RocketmqClient" level="warn">
+            <AppenderRef ref="rraf-error"/>
+        </Logger>
+    </Loggers>
+</Configuration>
